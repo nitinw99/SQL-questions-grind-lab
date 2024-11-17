@@ -1,0 +1,23 @@
+/*
+
+- Consider all LinkedIn users who, at some point, worked at Microsoft. 
+For how many of them was Google their next employer right after Microsoft (no employers in between)?
+
+
+CREATE TABLE LINKEDIN_USERS (user_id INT,employer VARCHAR(255),position VARCHAR(255),start_date DATETIME,end_date DATETIME);
+
+INSERT INTO LINKEDIN_USERS (user_id, employer, position, start_date, end_date) VALUES(1, 'Microsoft', 'developer', '2020-04-13', '2021-11-01'),(1, 'Google', 'developer', '2021-11-01', NULL),(2, 'Google', 'manager', '2021-01-01', '2021-01-11'),(2, 'Microsoft', 'manager', '2021-01-11', NULL),(3, 'Microsoft', 'analyst', '2019-03-15', '2020-07-24'),(3, 'Amazon', 'analyst', '2020-08-01', '2020-11-01'),(3, 'Google', 'senior analyst', '2020-11-01', '2021-03-04'),(4, 'Google', 'junior developer', '2018-06-01', '2021-11-01'),(4, 'Google', 'senior developer', '2021-11-01', NULL),(5, 'Microsoft', 'manager', '2017-09-26', NULL),(6, 'Google', 'CEO', '2015-10-02', NULL);
+
+*/
+
+-- SELECT * FROM LINKEDIN_USERS;
+
+WITH CTE AS (
+SELECT USER_ID, EMPLOYER AS PREV_EMPLOYER,
+    LEAD(EMPLOYER) OVER(PARTITION BY USER_ID ORDER BY START_DATE) AS NEXT_EMPLOYER
+FROM LINKEDIN_USERS
+ORDER BY USER_ID)
+
+SELECT USER_ID
+FROM CTE
+WHERE PREV_EMPLOYER = 'Microsoft' AND NEXT_EMPLOYER = 'Google';
