@@ -1,7 +1,6 @@
 /*
 - Calculate the average net earnings per order grouped by weekday and hour from customer_placed_order_datetime. 
 The net earnings are computed as: order_total + tip_amount - discount_amount - refunded_amount.
-
 Round the result to 2 decimals.
 
 CREATE TABLE doordash_delivery (consumer_id BIGINT, customer_placed_order_datetime DATETIME, delivered_to_consumer_datetime DATETIME, delivery_region NVARCHAR(255), discount_amount BIGINT, driver_at_restaurant_datetime DATETIME, driver_id INT, is_asap INT, is_new INT, order_total FLOAT,  placed_order_with_restaurant_datetime DATETIME, refunded_amount FLOAT, restaurant_id BIGINT, tip_amount FLOAT);
@@ -16,6 +15,6 @@ VALUES (1, '2024-01-15 10:30:00', '2024-01-15 11:00:00', 'Region A', 5, '2024-01
 
 SELECT DAYNAME(customer_placed_order_datetime) AS week_day,
         date_part(hour,customer_placed_order_datetime) AS hr,
-        SUM(order_total + tip_amount - discount_amount - refunded_amount) AS net_earnings
+        ROUND(SUM(order_total + tip_amount - discount_amount - refunded_amount),2) AS net_earnings
 FROM doordash_delivery
 GROUP BY 1,2;
