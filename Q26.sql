@@ -12,9 +12,8 @@ VALUES (1, '2024-01-15 10:30:00', '2024-01-15 11:00:00', 'Region A', 5, '2024-01
 
 -- SELECT * FROM doordash_delivery;
 
-
 SELECT DAYNAME(customer_placed_order_datetime) AS week_day,
         date_part(hour,customer_placed_order_datetime) AS hr,
-        ROUND(SUM(order_total + tip_amount - discount_amount - refunded_amount),2) AS net_earnings
+        ROUND(AVG(order_total + tip_amount - discount_amount - refunded_amount),2) AS net_earnings
 FROM doordash_delivery
 GROUP BY 1,2;
